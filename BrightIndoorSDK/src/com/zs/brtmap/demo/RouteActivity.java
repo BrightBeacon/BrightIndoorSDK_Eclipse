@@ -92,14 +92,23 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 	public void onClickAtPoint(TYMapView mapView, Point mappoint) {
 		Log.i(TAG, "Clicked Point: " + mappoint.getX() + ", " +  mappoint.getY());
 		
+		if (isRouting){
+			Utils.showToast(RouteActivity.this, "已经规划路线，点击模拟定位导航效果");
+			TYLocalPoint localPoint = new TYLocalPoint(mappoint.getX(),mappoint.getY(),mapView.getCurrentMapInfo().getFloorNumber());
+			mapView.showLocation(localPoint);
+			mapView.showRemainingRouteResultOnCurrentFloor(localPoint);
+			mapView.showPassedAndRemainingRouteResultOnCurrentFloor(localPoint);
+			return;
+		}
+		
 		TYPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(), mappoint.getY());
 		if (poi == null) {
 			Utils.showToast(RouteActivity.this, "请选择地图范围内的点");
 			return;
 		}
 		String title = poi.getName();
-		mapCallout.setMaxWidth(500);
-		mapCallout.setMaxHeight(300);
+		mapCallout.setMaxWidth(Utils.dip2px(this, 300));
+		mapCallout.setMaxHeight(Utils.dip2px(this, 300));
 		mapCallout.setContent(loadCalloutView(title, mappoint));
 		mapCallout.show(mappoint);
 	}
@@ -111,7 +120,7 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 		TextView titleView = (TextView) view.findViewById(R.id.callout_title);
 		titleView.setText(title);
 		TextView detailView = (TextView) view.findViewById(R.id.callout_detail);
-		detailView.setText("x:" + pt.getX() + " y:" + pt.getY());
+		detailView.setText("x:" + pt.getX() + "\n y:" + pt.getY());
 		TextView cancelBtn = (TextView) view.findViewById(R.id.callout_cancel);
 		cancelBtn.setText("起点");
 		cancelBtn.setOnClickListener(new View.OnClickListener() {
