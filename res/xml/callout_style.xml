@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<calloutViewStyle
+    anchor="8"
+	backgroundAlpha="200"
+	backgroundColor="#ff00ff"
+    maxHeight ="800"
+    maxWidth ="800"/>
+</resources>
