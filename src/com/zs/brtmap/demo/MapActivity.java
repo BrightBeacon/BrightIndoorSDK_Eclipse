@@ -9,10 +9,8 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
 import com.ty.mapsdk.TYMapView;
-import com.ty.mapsdk.TYOfflineRouteManager;
 import com.ty.mapsdk.TYPictureMarkerSymbol;
 import com.ty.mapsdk.TYPoi;
-import com.ty.mapsdk.TYRouteResult;
 
 public class MapActivity extends BaseMapViewActivity {
 	static {

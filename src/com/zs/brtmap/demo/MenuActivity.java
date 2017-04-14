@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * 导航菜单页
  * 
- * @author zhiqiang
+ * @author thomasho
  *
  */
 public class MenuActivity extends Activity implements OnClickListener {

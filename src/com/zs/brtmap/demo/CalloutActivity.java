@@ -8,9 +8,7 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polygon;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapView;
-import com.ty.mapsdk.TYOfflineRouteManager;
 import com.ty.mapsdk.TYPoi;
-import com.ty.mapsdk.TYRouteResult;
 import com.zs.brtmap.demo.utils.Utils;
 
 import android.os.Bundle;

@@ -11,9 +11,7 @@ import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.TextSymbol;
 import com.ty.mapsdk.TYMapView;
-import com.ty.mapsdk.TYOfflineRouteManager;
 import com.ty.mapsdk.TYPictureMarkerSymbol;
-import com.ty.mapsdk.TYRouteResult;
 import com.zs.brtmap.demo.utils.Utils;
 
 import android.graphics.drawable.BitmapDrawable;
