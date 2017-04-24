@@ -40,7 +40,7 @@ public class MapActivity extends BaseMapViewActivity {
 			mapView.highlightPoi(poi);
 		}
 		TYPictureMarkerSymbol pms = new TYPictureMarkerSymbol(getResources()
-				.getDrawable(R.drawable.location));
+				.getDrawable(R.drawable.green_pushpin));
 		pms.setWidth(20.0f);
 		pms.setHeight(20.0f);
 		

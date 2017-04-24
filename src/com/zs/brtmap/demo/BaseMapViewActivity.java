@@ -4,6 +4,7 @@ import java.util.List;
 import com.esri.core.geometry.Point;
 import com.zs.brtmap.demo.R;
 import com.zs.brtmap.demo.adapter.MenuListAdapter;
+import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYMapView.TYMapViewListenser;
@@ -43,11 +44,10 @@ public abstract class BaseMapViewActivity extends Activity
 
 				initContentViewID();
 				setContentView(contentViewID);
-
+				
 				mapView = (TYMapView) findViewById(R.id.map);
 				//隐藏地图，楼层加载完成前黑屏
-				mapView.setVisibility(View.INVISIBLE);
-				
+				//mapView.setVisibility(View.INVISIBLE);
 				mapView.addMapListener(this);
 				mapView.init(Constants.BUILDING_ID,Constants.APP_KEY);
 			}
@@ -65,7 +65,7 @@ public abstract class BaseMapViewActivity extends Activity
 					showMapControl();
 					//mapView.setMapBackground(网格颜色, 线条颜色, 网格宽度, 线条宽度);
 					//mapView.setMapBackground(Color.BLACK, Color.BLACK, 20, 10);
-					mapView.setFloor(mapView.allMapInfo().get(0).getFloorNumber());
+					mapView.setFloor(mapView.allMapInfo().get(0));
 					mapView.setHighlightPoiOnSelection(false);
 					mapView.setAllowRotationByPinch(true);
 				}else {
@@ -108,7 +108,7 @@ public abstract class BaseMapViewActivity extends Activity
 						@Override
 						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 							TYMapInfo currentMapInfo = (TYMapInfo) parent.getItemAtPosition(position);
-							mapView.setFloor(currentMapInfo.getFloorNumber());
+							mapView.setFloor(currentMapInfo);
 							pw.dismiss();
 							menuListAdapter.setSelected(currentMapInfo);
 							btnFloor.setText(currentMapInfo.getFloorName());

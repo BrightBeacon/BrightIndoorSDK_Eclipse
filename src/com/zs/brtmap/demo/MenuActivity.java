@@ -1,5 +1,7 @@
 package com.zs.brtmap.demo;
 
+import org.xutils.x;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +28,9 @@ public class MenuActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu_layout);
 
+		x.Ext.init(getApplication());
+		x.Ext.setDebug(true);
+		
 		initView();
 		initListener();
 	}
