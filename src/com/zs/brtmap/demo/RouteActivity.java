@@ -220,7 +220,11 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 	// 路径规划回调
 	@Override
 	public void didFailSolveRouteWithError(TYOfflineRouteManager arg0, Exception arg1) {
-
+		Utils.showToast(RouteActivity.this,"路径规划失败");
+		mapView.resetRouteLayer();
+		isRouting = false;
+		startPoint = null;
+		endPoint = null;
 	}
 
 	@Override

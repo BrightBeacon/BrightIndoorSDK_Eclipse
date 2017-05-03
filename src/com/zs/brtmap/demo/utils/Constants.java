@@ -16,6 +16,5 @@ public class Constants {
 	 //**********************************以上必须修改***********************************
 
 	 //本地数据总目录
-	public static final String CACHE_DIR = Environment.getExternalStorageDirectory().getPath() + File.separator
-			+ "BrtMapDemo";
+//	public static final String CACHE_DIR = Environment.getExternalStorageDirectory().getPath() + File.separator + "TYData";
 }

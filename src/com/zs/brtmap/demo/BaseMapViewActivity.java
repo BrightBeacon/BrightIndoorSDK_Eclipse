@@ -4,7 +4,6 @@ import java.util.List;
 import com.esri.core.geometry.Point;
 import com.zs.brtmap.demo.R;
 import com.zs.brtmap.demo.adapter.MenuListAdapter;
-import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYMapView.TYMapViewListenser;
