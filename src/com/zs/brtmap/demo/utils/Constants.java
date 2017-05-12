@@ -15,6 +15,6 @@ public class Constants {
 	 //public static final int MAJOR = 10098;
 	 //**********************************以上必须修改***********************************
 
-	 //本地数据总目录
+	 //默认目录
 //	public static final String CACHE_DIR = Environment.getExternalStorageDirectory().getPath() + File.separator + "TYData";
 }

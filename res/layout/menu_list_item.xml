@@ -20,6 +20,6 @@
             android:padding="10dp"
             android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:text="尖沙咀"
+            android:text="test"
             android:textColor="@android:color/holo_blue_dark"/>
 </FrameLayout>

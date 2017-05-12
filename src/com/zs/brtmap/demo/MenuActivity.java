@@ -1,7 +1,5 @@
 package com.zs.brtmap.demo;
 
-import org.xutils.x;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,14 +20,12 @@ public class MenuActivity extends Activity implements OnClickListener {
 	private TextView showMapLayer;
 	private TextView showRoute;
 	private TextView showLocation;
+	private TextView showSearch;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu_layout);
-
-		x.Ext.init(getApplication());
-		x.Ext.setDebug(true);
 		
 		initView();
 		initListener();
@@ -41,6 +37,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		showMapLayer.setOnClickListener(this);
 		showRoute.setOnClickListener(this);
 		showLocation.setOnClickListener(this);
+		showSearch.setOnClickListener(this);
 	}
 
 	private void initView() {
@@ -49,6 +46,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		showMapLayer = (TextView) findViewById(R.id.show_map_layer);
 		showRoute = (TextView) findViewById(R.id.show_map_route);
 		showLocation = (TextView) findViewById(R.id.show_location);
+		showSearch = (TextView) findViewById(R.id.show_search);
 	}
 
 	@Override
@@ -69,6 +67,9 @@ public class MenuActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.show_location:
 			intent = new Intent(this, LocationActivity.class);
+			break;
+		case R.id.show_search:
+			intent = new Intent(this, SearchActivity.class);
 			break;
 		}
 		if (intent != null) {

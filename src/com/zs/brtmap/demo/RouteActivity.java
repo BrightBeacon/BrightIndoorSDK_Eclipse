@@ -114,6 +114,7 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 			}
 			mapView.showPassedAndRemainingRouteResultOnCurrentFloor(localPoint);
 			//显示路径提示
+			
 			TYRoutePart part = routeResult.getNearestRoutePart(localPoint);
 			if (part != null) {
 				List<TYDirectionalHint> hints = routeResult.getRouteDirectionalHint(part);
