@@ -1,5 +1,6 @@
 package com.zs.brtmap.demo;
 
+import android.R.bool;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.SearchView;
@@ -8,12 +9,15 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.TextSymbol;
+import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.PoiEntity;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYPictureMarkerSymbol;
 import com.ty.mapsdk.TYSearchAdapter;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SearchActivity extends BaseMapViewActivity {
@@ -101,8 +105,26 @@ public class SearchActivity extends BaseMapViewActivity {
     }
     private void showPoiByName(String name) {
         TYSearchAdapter searchAdapter = new TYSearchAdapter(mapView.building.getBuildingID());
-        searchList = searchAdapter.queryPoi(name,mapView.currentMapInfo.getFloorNumber());
-        for (PoiEntity entity : searchList) {
+        searchList = searchAdapter.querySql("select * from POI where name like '%"+name+"%' order by name,floor_number");//queryPoi(name,mapView.currentMapInfo.getFloorNumber());
+        
+        List<PoiEntity> distinctArray=new ArrayList<PoiEntity>();
+        for (PoiEntity pe : searchList) {
+        	boolean isExist = false;
+			for(PoiEntity tmp :distinctArray ){
+				if (tmp.getFloorNumber()==pe.getFloorNumber() && tmp.getName().equals(pe.getName()) && Math.abs(tmp.getLabelX() -pe.getLabelX())<1.0&& Math.abs(tmp.getLabelX() -pe.getLabelX())<1.0) {
+					isExist = true;
+					break;
+				}
+			}
+			if (isExist == false) {
+				distinctArray.add(pe);
+			}
+		}
+        
+        for (PoiEntity entity : distinctArray) {
+        	if (entity.getFloorNumber() != mapView.currentMapInfo.getFloorNumber()) {
+				continue;
+			}
             Point point = new Point(entity.getLabelX(),entity.getLabelY());
             Graphic graphic = new Graphic(point,getGreenpinSymbol());
             poiLayer.addGraphic(graphic);

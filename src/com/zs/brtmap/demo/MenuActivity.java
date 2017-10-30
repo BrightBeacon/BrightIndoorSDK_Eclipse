@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * 导航菜单页
  * 
- * @author thomasho
+ * @author thomasho no happy so low!
  *
  */
 public class MenuActivity extends Activity implements OnClickListener {
@@ -29,6 +29,11 @@ public class MenuActivity extends Activity implements OnClickListener {
 		
 		initView();
 		initListener();
+	}
+	
+	private void noHappySoLow()
+	{
+		
 	}
 
 	private void initListener() {

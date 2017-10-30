@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.esri.android.map.Callout;
 import com.esri.core.geometry.Envelope;
+import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
+import com.esri.core.geometry.Proximity2DResult;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYDirectionalHint;
 import com.ty.mapsdk.TYMapInfo;
@@ -66,6 +68,7 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 				isRouteManagerReady = true;
 			}
 		}).start();
+		
 	}
 
 	private void initSymbols() {
@@ -87,6 +90,11 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 		switchSymbol.setWidth(37);
 		switchSymbol.setHeight(37);
 		mapView.setSwitchSymbol(switchSymbol);
+		
+		TYPictureMarkerSymbol pic = new TYPictureMarkerSymbol(getResources().getDrawable(R.drawable.location_arrow));
+        pic.setWidth(48);
+        pic.setHeight(48);
+		mapView.setLocationSymbol(pic);
 	}
 	public TYLocalPoint p2lp(Point pt) {
 		return new TYLocalPoint(pt.getX(),pt.getY(),mapView.getCurrentMapInfo().getFloorNumber());
@@ -97,9 +105,14 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 		Log.i(TAG, "Clicked Point: " + mappoint.getX() + ", " +  mappoint.getY());
 
 
+		TYLocalPoint localPoint = p2lp(mappoint);
 		if (isRouting){
-			TYLocalPoint localPoint = p2lp(mappoint);
-			if (localPoint.distanceWithPoint(endPoint)<=2){
+			localPoint = routeManager.getNearestRoutePoint(localPoint);
+
+			TYRoutePart part = routeResult.getNearestRoutePart(localPoint);
+			double end = part==null?10000:routeResult.distanceToRouteEnd(localPoint);
+			Log.e(TAG, end+"剩余距离");
+			if (end < 10.0){
 				isRouting = false;
 				mapView.resetRouteLayer();
 				startPoint = null;
@@ -107,16 +120,21 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 				Utils.showToast(this, "已到达终点附近");
 				return;
 			}
-			if(routeResult.isDeviatingFromRoute(localPoint,2)){
-				Utils.showToast(this, "模拟2米偏航，重新规划路线");
+			if(routeResult.isDeviatingFromRoute(localPoint,10)){
+				Utils.showToast(this, "模拟10米偏航，重新规划路线");
 				setStartPoint(mappoint);
 				return;
 			}
 			mapView.showPassedAndRemainingRouteResultOnCurrentFloor(localPoint);
 			//显示路径提示
 			
-			TYRoutePart part = routeResult.getNearestRoutePart(localPoint);
 			if (part != null) {
+				Proximity2DResult result = GeometryEngine.getNearestCoordinate(part.getRoute(), mappoint, false);
+				Point ptOnRoute = result.getCoordinate();
+				localPoint.setX(ptOnRoute.getX());
+				localPoint.setY(ptOnRoute.getY());
+				mapView.showLocation(localPoint);
+				
 				List<TYDirectionalHint> hints = routeResult.getRouteDirectionalHint(part);
 				TYDirectionalHint hint  = routeResult.getDirectionalHintForLocationFromHints(localPoint,hints);
 				if(hint != null){
@@ -180,7 +198,7 @@ public class RouteActivity extends BaseMapViewActivity implements TYOfflineRoute
 		});
 		return view;
 	}
-
+	
 	private void setStartPoint(Point currentPoint) {
 		if (currentPoint == null) {
 			return;

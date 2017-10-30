@@ -1,31 +1,36 @@
 package com.zs.brtmap.demo;
 
-import java.util.Arrays;
 import java.util.List;
 
+import com.esri.android.map.event.OnPinchListener;
+import com.esri.core.symbol.MarkerSymbol;
+import com.esri.core.symbol.Symbol;
 import com.ty.locationengine.ble.TYBLEEnvironment;
 import com.ty.locationengine.ble.TYBeacon;
 import com.ty.locationengine.ble.TYLocationManager;
 import com.ty.locationengine.ble.TYLocationManager.TYLocationManagerListener;
 import com.ty.locationengine.ble.TYPublicBeacon;
-import com.ty.locationengine.ibeacon.BeaconRegion;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYPictureMarkerSymbol;
+import com.ty.mapsdk.TYMapView.TYMapViewMode;
 import com.zs.brtmap.demo.utils.Constants;
 import com.zs.brtmap.demo.utils.Utils;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LocationActivity extends BaseMapViewActivity implements TYLocationManagerListener {
 
 	private TYLocationManager locationManager;
 	private boolean isShowLocation;
-	
+	private ImageView mSouthIV;
+    private float mMapDegree;//地图旋转角度
+
 	static {
 		System.loadLibrary("TYMapSDK");
 		System.loadLibrary("TYLocationEngine");
@@ -33,9 +38,8 @@ public class LocationActivity extends BaseMapViewActivity implements TYLocationM
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+        mSouthIV = (ImageView) findViewById(R.id.iv_north);
 		initView();
 		Log.i(TAG,TYMapEnvironment.getSDKVersion()+TYBLEEnvironment.getSDKVersion());
 	}
@@ -69,20 +73,55 @@ public class LocationActivity extends BaseMapViewActivity implements TYLocationM
 	}
 	
 	@Override
-	public void mapViewDidLoad(TYMapView mapView,Error error) {
-		// TODO Auto-generated method stub
+	public void mapViewDidLoad(final TYMapView mapView,Error error) {
 		if (error != null){
 			Utils.showToast(this,error.toString());
 			return;
 		}
 		super.mapViewDidLoad(mapView,error);
 		//mapView加载完毕
-		TYPictureMarkerSymbol pic = new TYPictureMarkerSymbol(getResources().getDrawable(R.drawable.l7));
+		final TYPictureMarkerSymbol pic = new TYPictureMarkerSymbol(getResources().getDrawable(R.drawable.location_arrow));
         pic.setWidth(48);
         pic.setHeight(48);
 		mapView.setLocationSymbol(pic);
 		//currentBuilding被初始化
 		initLocation();
+		float angle = (float) mapView.building.getInitAngle();
+		mSouthIV.setRotation(angle);
+		mapView.setOnPinchListener(new OnPinchListener() {//地图旋转监听
+            @Override
+            public void prePointersMove(float v, float v1, float v2, float v3, double v4) {
+            }
+ 
+            @Override
+            public void postPointersMove(float v, float v1, float v2, float v3, double v4) {
+            	pic.setAngle((float) (-mapView.getRotationAngle()+mapView.building.getInitAngle()));
+//                mSouthIV.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mMapDegree = (float) (mapView.getRotationAngle());
+//                        mSouthIV.setRotation((float) (-mMapDegree + mapView.building.getInitAngle()));
+//                    }
+//                });
+            }
+ 
+            @Override
+            public void prePointersDown(float v, float v1, float v2, float v3, double v4) {
+            }
+ 
+            @Override
+            public void postPointersDown(float v, float v1, float v2, float v3, double v4) {
+               
+            }
+ 
+            @Override
+            public void prePointersUp(float v, float v1, float v2, float v3, double v4) {
+            }
+ 
+            @Override
+            public void postPointersUp(float v, float v1, float v2, float v3, double v4) {
+            }
+        });
 	}
 	
 	private void initLocation() {
@@ -93,8 +132,8 @@ public class LocationActivity extends BaseMapViewActivity implements TYLocationM
 			if (locationManager == null) {
 				locationManager = new TYLocationManager(this, Constants.BUILDING_ID, Constants.APP_KEY);
 				locationManager.addLocationEngineListener(this);
-				BeaconRegion region = new BeaconRegion("demo",Constants.UUID,null,null);
-				locationManager.setBeaconRegion(Arrays.asList(new BeaconRegion[]{region}));
+//				BeaconRegion region = new BeaconRegion("demo",Constants.UUID,null,null);
+//				locationManager.setBeaconRegion(Arrays.asList(new BeaconRegion[]{region}));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -120,7 +159,7 @@ public class LocationActivity extends BaseMapViewActivity implements TYLocationM
 		//mapView.setMapMode(TYMapViewMode.TYMapViewModeDefault);
 		//mapView.setMapMode(TYMapViewMode.TYMapViewModeFollowing);
 		Log.i(TAG,"地图初始北偏角："+mapView.building.getInitAngle()+"；当前设备北偏角："+newHeading);
-		 mapView.processDeviceRotation(newHeading);
+//		 mapView.processDeviceRotation(newHeading);
 	}
 
 	@Override
@@ -142,6 +181,8 @@ public class LocationActivity extends BaseMapViewActivity implements TYLocationM
 		Log.i(TAG, newLocalPoint.getX()+" "+newLocalPoint.getY());
 		mapView.showLocation(newLocalPoint);
 		//mapView.showRemainingRouteResultOnCurrentFloor(newLocalPoint);
+//		mapView.centerAt(new Point(newLocalPoint.getX(),newLocalPoint.getY()),true);
+//		mapView.setRotationAngle(mapView.building.getInitAngle());
 	}
 
 	@Override

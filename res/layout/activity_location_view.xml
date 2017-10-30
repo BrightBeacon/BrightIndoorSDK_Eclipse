@@ -4,6 +4,15 @@
     android:layout_height="match_parent" >
     <include layout="@layout/activity_callout_view"/>
     <ImageView
+        android:id="@+id/iv_north" 
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp" 
+        android:src="@drawable/northarrow"
+         android:contentDescription="@string/app_name"
+        />
+       
+    <ImageView
        	 android:layout_width="40dp"
        	 android:layout_height="40dp"
          android:layout_alignStart="@+id/show_location"	

@@ -1,9 +1,12 @@
 package com.zs.brtmap.demo;
 import java.util.List;
 
+import org.xutils.x;
+
 import com.esri.core.geometry.Point;
 import com.zs.brtmap.demo.R;
 import com.zs.brtmap.demo.adapter.MenuListAdapter;
+import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYMapView.TYMapViewListenser;
@@ -40,14 +43,16 @@ public abstract class BaseMapViewActivity extends Activity
 			@Override
 			protected void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
-
+//				x.Ext.init(getApplication());
+//				x.Ext.setDebug(true);
 				initContentViewID();
 				setContentView(contentViewID);
-				
+//				TYMapEnvironment.initMapEnvironment();
 				mapView = (TYMapView) findViewById(R.id.map);
 				//隐藏地图，楼层加载完成前黑屏
 				//mapView.setVisibility(View.INVISIBLE);
 				mapView.addMapListener(this);
+				mapView.setFacilityPriority(false);
 				mapView.init(Constants.BUILDING_ID,Constants.APP_KEY);
 			}
 			// 用于子类设置界面元素初始化
@@ -56,7 +61,7 @@ public abstract class BaseMapViewActivity extends Activity
 			public void showMapControl() {
 				showFloorControl();
 				showZoomControl();
-				setMinMaxScale(1, 1000);
+//				setMinMaxScale(1, 1000);
 			}
 			@Override
 			public void  mapViewDidLoad(TYMapView mapView,Error error) {
@@ -167,6 +172,8 @@ public abstract class BaseMapViewActivity extends Activity
 				mapView.setMaxScale(min/deviceDistance);//比例尺：1米/屏幕总宽
 				mapView.setMinScale(max/deviceDistance);//比例尺：100米/屏幕总宽
 			}
+			
+
 			@Override
 			public void onFinishLoadingFloor(final TYMapView mapView, TYMapInfo mapInfo) {
 				runOnUiThread(new Runnable() {
@@ -177,10 +184,10 @@ public abstract class BaseMapViewActivity extends Activity
 				});
 				//地图楼层切换
 				//设置比例尺让：地图宽==屏幕宽
-				DisplayMetrics metrics = getResources().getDisplayMetrics();
-				double deviceDistance = metrics.widthPixels/metrics.xdpi*0.0254;
-				double mapDistance = mapInfo.getMapExtent().getXmax() - mapInfo.getMapExtent().getXmin();
-				mapView.setScale(mapDistance/deviceDistance);
+//				DisplayMetrics metrics = getResources().getDisplayMetrics();
+//				double deviceDistance = metrics.widthPixels/metrics.xdpi*0.0254;
+//				double mapDistance = mapInfo.getMapExtent().getXmax() - mapInfo.getMapExtent().getXmin();
+//				mapView.setScale(mapDistance/deviceDistance);
 
 				//移动到地图中心点
 				double centerX = mapInfo.getMapExtent().getXmax()+mapInfo.getMapExtent().getXmin();
