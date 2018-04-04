@@ -1,9 +1,5 @@
 package com.zs.brtmap.demo.utils;
 
-import java.io.File;
-
-import android.os.Environment;
-
 public class Constants {
 
 	 //**********************************以下必须修改***********************************
